@@ -1,0 +1,15 @@
+﻿@model PauloRodrigues.LojaVirtual.Web.Models.ViewModel.ProdutoViewModel
+@using PauloRodrigues.LojaVirtual.Web.HtmlHelpers
+
+@{
+    ViewBag.Title = "ListarProdutos";
+}
+
+@foreach (var p in Model.Produtos)
+{
+    @Html.Partial("ProdutoDetalhes", p)
+}
+
+@*<div class="btn-group col-lg-pull-0">
+    @Html.PageLinks(Model.Paginacao, x => Url.Action("ListarProdutos", new { pagina = x, categoria = Model.CategoriaAtual }))    
+</div>*@

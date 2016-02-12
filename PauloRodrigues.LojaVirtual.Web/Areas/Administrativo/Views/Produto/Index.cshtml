@@ -1,0 +1,66 @@
+﻿@model IEnumerable<PauloRodrigues.LojaVirtual.Dominio.Entidades.Produto>
+
+@{
+    ViewBag.Title = "Administrativo - Produtos";
+    Layout = "~/Areas/Administrativo/Views/Shared/_AdministrativoLayout.cshtml";
+}
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3>Benz Loja Virtual - Administrativo - Produtos</h3>
+    </div>
+
+    <div class="panel-body">
+        @*@Html.ActionLink("Novo Produto", "Novo", "Produto",
+        new {@class = "btn btn-sm btn-default"})*@
+
+        <a class="btn icon-btn btn-sm btn-success" href="/Administrativo/Produto/Novo">
+            <span class="glyphicon btn-glyphicon glyphicon-plus img-circle text-success"></span>Novo Produto
+        </a>
+
+        <table class="table table-striped table-condensed table-bordered">
+            <thead>
+            <tr>
+                <th class="text-center">#ID</th>
+                <th>Produto</th>
+                <th class="text-right">Valor</th>
+                <th class="text-center">Exclusão</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var item in Model)
+            {
+                <tr id="row-@item.ProdutoID">
+
+                    <td class="text-right">
+                        # @item.ProdutoID
+                    </td>
+
+                    <td>
+                        <img src="~/Content/img/edit.png"/>
+                        @Html.ActionLink(@item.Nome, "Alterar", new {item.ProdutoID})
+                    </td>
+
+                    <td class="text-right">
+                        @item.Preco.ToString("c")
+                    </td>
+
+                    <td class="text-center">
+                        <button class="btn icon-btn btn-danger btn-sm btnRemover" id="@item.ProdutoID" name="@item.Nome">
+                            <span class="glyphicon btn-glyphicon glyphicon-trash img-circle text-danger"></span>Remover
+                        </button>
+                        
+                        @*@using (Html.BeginForm("Remover", "Produto"))
+                            {
+                                @Html.Hidden("ProdutoId", item.ProdutoID)
+                                <input type="submit" class="btn btn-default btn-sm" value="Remover"/>
+                            }*@
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@Html.Partial("Confirmar")

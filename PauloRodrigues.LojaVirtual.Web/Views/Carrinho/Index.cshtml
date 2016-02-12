@@ -1,0 +1,64 @@
+﻿@model PauloRodrigues.LojaVirtual.Web.Models.ViewModel.CarrinhoViewModel
+
+@{ ViewBag.Title = "Loja Benz: Seu carrinho"; }
+
+<h3> Seu carrinho </h3>
+
+<table id="carrinhoTable" class="table">
+    <thead>
+        <tr>
+            <th>Produto</th>
+            <th class="text-right">Valor</th>
+            <th class="text-right">Subtotal</th>
+            <th class="text-center">Quantidade</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Carrinho.ItensCarrinhos)
+        {
+            <tr>
+                <td class="text-left">@item.Produto.Nome </td>
+                <td class="text-right">@item.Produto.Preco.ToString("c") </td>
+                <td class="text-right">@((item.Quantidade*item.Produto.Preco).ToString("c"))</td>
+
+                <td class="text-center">
+                    @using (Html.BeginForm("Adicionar", "Carrinho"))
+                    {
+                        @Html.Hidden("ProdutoId", item.Produto.ProdutoID)
+                        @Html.HiddenFor(x => x.ReturnUrl)
+                        @Html.TextBox("quantidade", item.Quantidade, new { @class = "quantidade-textBox", @type = "number", min = "1", max = "20", required="required" })
+                        <input class="btn btn-sm btn-danger" type="submit" value="Atualizar"/>
+                    }
+                </td>
+
+                <td class="text-center">
+                    @using (Html.BeginForm("Remover", "Carrinho"))
+                    {
+                        @Html.Hidden("ProdutoId", item.Produto.ProdutoID)
+                        @Html.HiddenFor(x => x.ReturnUrl)
+                        <input class="btn btn-sm btn-warning" type="submit" value="Remover"/>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="3" class="text-right">Total:</td>
+            <td class="text-right">@Model.Carrinho.ObterValorTotal().ToString("c")</td>
+            <td></td>
+        </tr>
+    </tfoot>
+</table>
+
+<div class="text-center">
+    <a class="btn btn-primary" href="@Model.ReturnUrl">
+        Continuar comprando
+    </a>
+
+    @if (Model.Carrinho.ItensCarrinhos.Any())
+    {
+        @Html.ActionLink("Finalizar meu pedido", "FecharPedido", "Carrinho", new {@class = "btn btn-success"})
+    }
+</div>

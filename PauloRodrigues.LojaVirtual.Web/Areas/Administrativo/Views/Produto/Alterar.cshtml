@@ -1,0 +1,86 @@
+﻿@model PauloRodrigues.LojaVirtual.Dominio.Entidades.Produto
+
+@{
+    ViewBag.Title = "Alterar" + @Model.Nome;
+    Layout = "~/Areas/Administrativo/Views/Shared/_AdministrativoLayout.cshtml";
+}
+
+<div class="panel">
+    <div class="panel-heading">
+        <h3>
+            @(Model.ProdutoID == 0 ? "Novo Produto": "Alterar " + (@Model.Nome ?? "produto"))
+        </h3>
+        <span class="field-validation-error" style="float: right;">(*) campos obrigatórios</span>
+    </div>
+
+    @using (Html.BeginForm("Alterar", "Produto", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <div class="panel-body">
+
+            @Html.HiddenFor(p => p.ProdutoID)
+
+            @foreach (var property in ViewData.ModelMetadata.Properties)
+            {
+                //if (property.PropertyName != "ProdutoID")
+                switch (property.PropertyName)
+                {
+                    case "ProdutoID":
+                    case "Imagem":
+                    case "ContentType":
+                        break;
+                    
+                    default:
+                        <div class="form-group">
+                            <label>
+                                @(property.DisplayName ?? property.PropertyName)
+
+                                @if (property.IsRequired)
+                                {
+                                    <span class="field-validation-error"> *</span>
+                                }
+
+                                @Html.ValidationMessage(property.PropertyName)
+                            </label>
+
+                            @if (property.PropertyName == "Descricao")
+                            {
+                                @Html.TextArea(property.PropertyName, null, new {@class = "form-control", rows = 5})
+                            }
+                            else
+                            {
+                                @Html.TextBox(property.PropertyName, null, new {@class = "form-control"})
+                            }
+
+                        </div>
+                        break;
+                }
+            }
+
+            <div class="form-group">
+                <div style="position: relative">
+                    <label>Imagem</label>
+                    <a href="javascript:;" class="btn btn-sm">
+                        Selecione a imagem...
+                        <input type="file" name="Image" size="40" style="position: absolute; z-index: 2; top: 0; left: 0; filter: alpha(opacity=0); opacity: 0; background-color: transparent; color: transparent;" onchange='$("#upload-file-info").html($(this).val()); '/>
+                        <span id="upload-file-info" class="label label-info"></span>
+                    </a>
+                </div>
+            </div>
+
+            @if (Model.Imagem == null)
+            {
+                <div class="form-control-static">Nenhuma imagem</div>
+            }
+            else
+            {
+                <img class="img-thumbnail" width="120" height="120" src="/Vitrine/UrlPicture?ProdutoID=@Model.ProdutoID" />
+            }
+
+        </div>
+
+        <div class="panel-footer">
+            <input type="submit" value="Salvar" class="btn btn-primary"/>
+            @Html.ActionLink("Cancelar e retornar", "Index", "Produto", null, new {@class = "btn btn-default"})
+        </div>
+    }
+</div>

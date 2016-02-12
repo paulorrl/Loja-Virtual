@@ -1,0 +1,8 @@
+﻿.input-validation-error { border: 1px solid #f00; background-color: #fee; }
+.validation-summary-errors { font-weight: bold; color: #f00; }
+.validation-summary-valid { display: none; }
+.field-validation-error { color: #f00; }
+
+/*Icones da área administrativa*/
+.btn-glyphicon { padding:8px; background:#ffffff; margin-right:4px; }
+.icon-btn { padding: 1px 15px 3px 2px; border-radius:50px;}

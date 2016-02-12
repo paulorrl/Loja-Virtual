@@ -1,0 +1,21 @@
+﻿@model System.Collections.Generic.IEnumerable<String>
+
+<ul class="nav nav-pills nav-stacked">
+    <li>
+        @Html.ActionLink("Todos os produtos", "ListarProdutos", "Vitrine")
+    </li>
+
+    @foreach (var option in Model)
+    {
+        <li class="@(option == ViewBag.CategoriaSelecionada ? "active" : "")">
+            @Html.RouteLink(option,
+                new
+                {
+                    controller = "Vitrine",
+                    action = "ListarProdutos",
+                    categoria = option,
+                    pagina = 1
+                })
+        </li>
+    }
+</ul>

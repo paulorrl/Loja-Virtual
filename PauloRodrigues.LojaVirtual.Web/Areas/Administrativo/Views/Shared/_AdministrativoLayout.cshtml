@@ -1,0 +1,32 @@
+﻿<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <meta name="viewport" content="width=device-width">
+        <title>@ViewBag.Title Benz administrativo</title>
+
+        @*TODO: Migrar importações para Bundles/Minification*@
+
+        <link href="~/Content/bootstrap.min.css" rel="stylesheet"/>
+        <link href="~/Content/bootstrap-theme.min.css" rel="stylesheet"/>
+        <link href="~/Content/MyStyles/ErrorStyle.css" rel="stylesheet"/>
+        <link href="~/Content/MyStyles/ButtonToTOP.css" rel="stylesheet"/>
+
+        <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+        <script src="~/Scripts/bootstrap.min.js"></script>
+        <script src="~/Scripts/jquery.validate.min.js"></script>
+        <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+        <script src="~/Scripts/MyScripts/jQueryFixes.js"></script>
+        <script src="~/Scripts/MyScripts/ButtonToTOP.js"></script>
+    </head>
+    <body>
+        <div>
+            @if (TempData["mensagem"] != null)
+            {
+                <div id="mensagem" class="alert alert-success">@TempData["mensagem"]</div>
+            }
+
+            @RenderBody()
+        </div>
+    </body>
+</html>

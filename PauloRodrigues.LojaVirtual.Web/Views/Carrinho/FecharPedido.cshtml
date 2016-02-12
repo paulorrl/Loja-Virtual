@@ -1,0 +1,131 @@
+﻿@model PauloRodrigues.LojaVirtual.Dominio.Entidades.Pedido
+
+@{ ViewBag.Title = "Loja Benz: Finalizar pedido"; }
+
+<h3>Finalizar pedido</h3>
+<p>Preencha suas informações abaixo
+    <span class="field-validation-error" style="float: right;"> (*) Campos obrigatórios</span>
+</p>
+
+@using (Html.BeginForm())
+{
+    @Html.ValidationSummary()
+
+    <h4>Dados do destinatário</h4>
+
+    <div class="form-group">
+        <label>
+            @Html.DisplayNameFor(x => x.NomeCliente)
+            <span class="field-validation-error"> *</span>
+        </label>
+        @Html.ValidationMessageFor(x => x.NomeCliente)
+        @Html.TextBoxFor(x => x.NomeCliente, new {@class = "form-control", autofocus = "autofocus", autocomplete = "on"})
+    </div>
+
+    <div class="form-group">
+        <label>
+            @Html.DisplayNameFor(x => x.Email)
+            <span class="field-validation-error"> *</span>
+        </label>
+        @Html.ValidationMessageFor(x => x.Email)
+        @Html.TextBoxFor(x => x.Email, new { @class = "form-control", autocomplete = "on" })
+    </div>
+
+    <h4>Dados de entrega</h4>
+
+    foreach (var property in ViewData.ModelMetadata.Properties)
+    {
+        if (property.PropertyName != "NomeCliente" && property.PropertyName != "EmbrulharPresente" && property.PropertyName != "Email")
+        {
+            <div class="form-group">
+                <label>
+                    @(property.DisplayName)
+
+                    @if (property.IsRequired)
+                    {
+                        <span class="field-validation-error"> *</span>
+                    }
+                    
+                </label>
+                @Html.ValidationMessage(property.PropertyName)
+                @Html.TextBox(property.PropertyName, null, new { @class = "form-control", autocomplete = "on" })
+            </div>
+        }
+    }
+
+    <h4>Opção para presente</h4>
+    
+    <div class="checkbox">
+        <label>
+            @Html.EditorFor(x => x.EmbrulharPresente)
+            @Html.DisplayNameFor(x => x.EmbrulharPresente)
+        </label>
+    </div>
+
+    <input class="btn btn-sm btn-danger" type="reset" value="Redefinir campos" id="btnReset" />
+    <input class="btn btn-sm btn-success" type="submit" value="Finalizar pedido"/>
+}
+
+@section scripts
+{
+    @*
+        Renderizando após o jquery, utilizando o RenderSection da _Layout.cshtml
+    *@
+
+    <script>
+        /* TODO: Migrar implementação JavaScript para arquivo externo ... */
+
+        $('#Cep').change(function (e) {
+            e.preventDefault();
+
+            var $inputs =
+            [
+                $('#Logradouro'),
+                $('#Bairro'),
+                $('#Cidade'),
+                $('#Estado')
+            ];
+
+            cleanInput($inputs);
+            // disabledInput($inputs, false);
+
+            var $cep = $('#Cep').val().replace("-", "");
+
+            $.getJSON("http://cep.republicavirtual.com.br/web_cep.php?cep=" + $cep + "&formato=json",
+                {},
+                function (data) {
+                    if (data.resultado_txt == 'sucesso - cep completo') {
+                        $inputs[0].val(data.tipo_logradouro + ' ' + data.logradouro);
+                        $inputs[1].val(data.bairro);
+                        $inputs[2].val(data.cidade);
+                        $inputs[3].val(data.uf);
+
+                        disabledInput($inputs, true);
+                    }
+                }
+            );
+        });
+
+        $('#btnReset').click(function () {
+            disabledInput(
+                [
+                    $('#Logradouro'),
+                    $('#Bairro'),
+                    $('#Cidade'),
+                    $('#Estado')
+                ], false
+            );
+        });
+
+        // TODO: Melhorar implementações abaixo ...
+        function cleanInput($inputs) {
+            for (var i = 0; i < $inputs.length; i++)
+                $inputs[i].val('');
+        }
+
+        function disabledInput($inputs, enabled) {
+            for (var i = 0; i < $inputs.length; i++)
+                $inputs[i].attr("readonly");
+        }
+</script>
+}

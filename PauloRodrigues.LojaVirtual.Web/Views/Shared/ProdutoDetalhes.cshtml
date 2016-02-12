@@ -1,0 +1,27 @@
+﻿@model PauloRodrigues.LojaVirtual.Dominio.Entidades.Produto
+
+<div class="well well-sm">
+    <div class="row">
+        <div class="pull-left" style="margin-right: 10px;">
+            @if (Model.Imagem != null)
+            {
+                <img class="img-thumbnail" width="120" height="120" src="@Url.Action("UrlPicture", "Vitrine", new {Model.ProdutoID}) " />
+            }
+            else
+            {
+                <img class="img-thumbnail" width="120" height="120" src="../../Content/Produtos/default.jpg" />
+            }
+
+        </div>    
+    </div>
+</div>
+
+<div class="row">
+    <h4>
+        @Html.ActionLink(@Model.Nome, "Detalhes", "Vitrine", new { id = @Model.ProdutoID }, new { @class = "deco-nome" })
+        <br/>
+        <span class="pull-right label label-success">
+            @Model.Preco.ToString("c")
+        </span>
+    </h4>
+</div>
